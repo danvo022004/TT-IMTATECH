@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104516697437",
+    "project_id": "appbanhang-c047f",
+    "storage_bucket": "appbanhang-c047f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104516697437:android:2f9f64c5913b81c5f77cb4",
+        "android_client_info": {
+          "package_name": "jccom.example.appbantra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDndOe7dfZ-bFgfjLB043UD2NXTFSJfay0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

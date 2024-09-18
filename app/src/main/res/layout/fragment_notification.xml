@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.NotificationFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="20dp"
+      android:gravity="center"
+      android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+      <ImageView
+          android:id="@+id/backnotification"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_arrow_back"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="120dp"
+            android:text="Thông Báo"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="20dp"
+          android:orientation="vertical"
+          android:background="@drawable/khung_profile"
+          android:layout_marginTop="20dp">
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Chào buổi sáng! Nhận ngay phiếu giảm giá 20%"
+              android:textColor="@color/black"
+              android:textStyle="bold"
+              android:textSize="20dp"/>
+
+          <TextView
+              android:id="@+id/textView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Khuyến mãi mùa hè giảm giá tới 20%. Số lượng phiếu giảm giá có hạn." />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="nhận ngay bây giờ! "/>
+      </LinearLayout>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="120dp"
+          android:padding="20dp"
+          android:orientation="vertical"
+          android:background="@drawable/khung_profile"
+          android:layout_marginTop="40dp">
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Khuyến mãi đặc biệt dành riêng cho bạn"
+              android:textColor="@color/black"
+              android:textStyle="bold"
+              android:textSize="20dp"/>
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Bộ sưu tập mùa thu mới giảm giá 30%."/>
+      </LinearLayout>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="120dp"
+          android:padding="20dp"
+          android:orientation="vertical"
+          android:background="@drawable/khung_profile"
+          android:layout_marginTop="50dp">
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Khuyến mại ngày lễ 50%."
+              android:textColor="@color/black"
+              android:textStyle="bold"
+              android:textSize="20dp"/>
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Nhấn vào đây để nhận phiếu giảm giá 50%"/>
+      </LinearLayout>
+  </LinearLayout>
+</FrameLayout>
