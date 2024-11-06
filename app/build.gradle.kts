@@ -47,12 +47,21 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.firebase.auth)
     implementation(libs.activity)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation ("com.google.firebase:firebase-auth:23.0.0")
+
+    // firebase Authentication
+//    implementation ("com.google.firebase:firebase-auth:23.0.0")
+
+    implementation ("com.google.firebase:firebase-auth:22.3.0")
+    implementation ("com.google.firebase:firebase-database:20.3.0")
     // glider
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     //Pie Chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
+
 }

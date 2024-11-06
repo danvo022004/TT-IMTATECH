@@ -22,7 +22,7 @@
             android:name=".Product_Management_Activity"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".RevennueActivity"
@@ -34,7 +34,7 @@
             android:name=".RegisterPage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".WelcomeActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
