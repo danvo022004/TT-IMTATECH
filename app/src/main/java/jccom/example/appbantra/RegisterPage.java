@@ -20,6 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterPage extends AppCompatActivity {
 
@@ -29,7 +32,8 @@ public class RegisterPage extends AppCompatActivity {
 
     TextView signIn;
 
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class RegisterPage extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -56,41 +63,88 @@ public class RegisterPage extends AppCompatActivity {
             }
         });
 
+//        signUp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String email, password;
+//                email = String.valueOf(editTextEmail.getText());
+//                password = String.valueOf(editTextPassword.getText());
+//
+//                if(TextUtils.isEmpty(email)) {
+//                    Toast.makeText(RegisterPage.this, "Enter Email", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if(TextUtils.isEmpty(email)) {
+//                    Toast.makeText(RegisterPage.this, "Enter Password", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+
+//                firebaseAuth.createUserWithEmailAndPassword(email, password)
+//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                if (task.isSuccessful()){
+//                                    Toast.makeText(RegisterPage.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
+//                                    Intent intent = new Intent(RegisterPage.this, LoginPage.class);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
+//                                else {
+//                                    Toast.makeText(RegisterPage.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
+
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String email, password;
-                email = String.valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
+            public void onClick(View v) {
+                registerUser();
+            }
+        });
+    }
 
-                if(TextUtils.isEmpty(email)) {
-                    Toast.makeText(RegisterPage.this, "Enter Email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    private void registerUser() {
+        String email, password;
+        email = String.valueOf(editTextEmail.getText());
+        password = String.valueOf(editTextPassword.getText());
 
-                if(TextUtils.isEmpty(email)) {
-                    Toast.makeText(RegisterPage.this, "Enter Password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        if(TextUtils.isEmpty(email)) {
+            Toast.makeText(RegisterPage.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                firebaseAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            createUserInDatabase(user);
+                        }else {
+                            Toast.makeText(RegisterPage.this, "Đăng ký thất bại: " + task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            private void createUserInDatabase(FirebaseUser user) {
+                String userId = user.getUid();
+                DatabaseReference userRef = mDatabase.child("users").child(userId);
+
+                userRef.child("email").setValue(user.getEmail());
+                userRef.child("role").setValue(user.getEmail())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    Toast.makeText(RegisterPage.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(RegisterPage.this, LoginPage.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                else {
-                                    Toast.makeText(RegisterPage.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(RegisterPage.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(RegisterPage.this, "Lỗi khi lưu thông tin người dùng" + task.getException().getMessage(),
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-
             }
-        });
-
-    }
 }
