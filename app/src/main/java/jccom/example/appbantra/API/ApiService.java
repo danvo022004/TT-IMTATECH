@@ -1,5 +1,7 @@
 package jccom.example.appbantra.API;
 
+import jccom.example.appbantra.Model.Revennue;
+import jccom.example.appbantra.Model.RevennueResponse;
 import jccom.example.appbantra.Model.User;
 import jccom.example.appbantra.Model.LoginRequest;
 import jccom.example.appbantra.Model.AuthResponse;
@@ -27,4 +29,7 @@ public interface ApiService {
     // Endpoint cập nhật thông tin người dùng
     @PUT("user/{id}")
     Call<User> updateUser(@Path("id") String userId, @Body User user);
+
+    @GET("revenue/by-product") // Adjust endpoint accordingly
+    Call<RevennueResponse> getRevenueByProduct();
 }
