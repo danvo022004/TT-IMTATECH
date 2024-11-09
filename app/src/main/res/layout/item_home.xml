@@ -1,49 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
 
-<LinearLayout
-    android:layout_width="200dp"
-    android:layout_height="300dp"
-    android:background="@drawable/khung_profile"
-    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:background="@drawable/khung_profile"
+        android:orientation="vertical">
+
+        <!-- Product Image -->
         <ImageView
+            android:id="@+id/product_image"
             android:layout_width="200dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:src="@drawable/img_tra_1" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Amata"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tinh chất trà Shan Tuyết cổ thụ"
-        android:layout_marginTop="10dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:padding="5dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="350.000đ"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_add_circle"/>
-    </LinearLayout>
-</LinearLayout>
 
+        <!-- Product Name -->
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amata"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <!-- Product Description -->
+        <TextView
+            android:id="@+id/product_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tinh chất trà Shan Tuyết cổ thụ"
+            android:layout_marginTop="10dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginHorizontal="5dp"/>
+
+
+
+        <!-- Price and Add Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="350.000đ"
+                android:textColor="@color/black"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/add_to_cart"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_add_circle"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

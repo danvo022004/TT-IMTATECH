@@ -94,11 +94,11 @@ public class LoginPage extends AppCompatActivity {
                     // Kiểm tra role và điều hướng
                     if (role.equals("admin")) {
                         // Nếu là admin, chuyển đến màn hình admin
-                        Intent intent = new Intent(LoginPage.this, AdminActivity.class);
+                        Intent intent = new Intent(LoginPage.this, Main_AdActivity.class);
                         startActivity(intent);
                     } else {
                         // Nếu là user, chuyển đến màn hình chính của người dùng
-                        Intent intent = new Intent(LoginPage.this, UserActivity.class);
+                        Intent intent = new Intent(LoginPage.this, MainActivity.class);
                         startActivity(intent);
                     }
 

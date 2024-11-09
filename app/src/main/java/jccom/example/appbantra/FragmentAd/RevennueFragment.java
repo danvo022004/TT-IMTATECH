@@ -1,4 +1,4 @@
-package jccom.example.appbantra.Fragment;
+package jccom.example.appbantra.FragmentAd;
 
 import android.os.Bundle;
 
