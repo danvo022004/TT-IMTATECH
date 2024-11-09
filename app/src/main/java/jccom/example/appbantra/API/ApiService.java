@@ -28,6 +28,7 @@ public interface ApiService {
     @POST("register")
     Call<Void> register(@Body User user);
 
+    // Endpoint cho đăng nhập người dùng
     @POST("login")
     Call<AuthResponse> login(@Body LoginRequest loginRequest);
 
