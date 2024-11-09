@@ -3,148 +3,113 @@ package jccom.example.appbantra;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+import jccom.example.appbantra.API.ApiService;
+import jccom.example.appbantra.API.RetrofitClient;
+import jccom.example.appbantra.Model.User;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterPage extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
-
-    Button signUp;
-
-    TextView signIn;
-
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private TextInputEditText editTextSDT, editTextPassword, editTextConfirmPassword, editTextName, editTextEmail;
+    private Button signUp;
+    private TextView signIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register_page);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        editTextEmail = findViewById(R.id.email);
+        // Lấy tham chiếu các View
+        editTextSDT = findViewById(R.id.sdt);
         editTextPassword = findViewById(R.id.password);
-        signIn = findViewById(R.id.sign_in);
+        editTextConfirmPassword = findViewById(R.id.cofirmpassword);
+
         signUp = findViewById(R.id.sign_up);
+        signIn = findViewById(R.id.sign_in);
 
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(RegisterPage.this, LoginPage.class);
-                startActivity(intent);
-                finish();
-            }
+        // Chuyển đến màn hình đăng nhập nếu đã có tài khoản
+        signIn.setOnClickListener(view -> {
+            Intent intent = new Intent(RegisterPage.this, LoginPage.class);
+            startActivity(intent);
+            finish();
         });
 
-//        signUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String email, password;
-//                email = String.valueOf(editTextEmail.getText());
-//                password = String.valueOf(editTextPassword.getText());
-//
-//                if(TextUtils.isEmpty(email)) {
-//                    Toast.makeText(RegisterPage.this, "Enter Email", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if(TextUtils.isEmpty(email)) {
-//                    Toast.makeText(RegisterPage.this, "Enter Password", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-//                firebaseAuth.createUserWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                if (task.isSuccessful()){
-//                                    Toast.makeText(RegisterPage.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(RegisterPage.this, LoginPage.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                }
-//                                else {
-//                                    Toast.makeText(RegisterPage.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerUser();
-            }
-        });
+        // Xử lý khi nhấn đăng ký
+        signUp.setOnClickListener(view -> registerUser());
     }
 
     private void registerUser() {
-        String email, password;
-        email = String.valueOf(editTextEmail.getText());
-        password = String.valueOf(editTextPassword.getText());
+        // Lấy giá trị từ các input
+        String phone = editTextSDT.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-        if(TextUtils.isEmpty(email)) {
-            Toast.makeText(RegisterPage.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        // Kiểm tra xem các trường có rỗng không
+        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword) ) {
+            Toast.makeText(RegisterPage.this, "Không được để rỗng", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            createUserInDatabase(user);
-                        }else {
-                            Toast.makeText(RegisterPage.this, "Đăng ký thất bại: " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+        // Kiểm tra số điện thoại
+        if (TextUtils.isEmpty(phone) || !Patterns.PHONE.matcher(phone).matches() || phone.length() < 10) {
+            Toast.makeText(RegisterPage.this, "SĐT không đúng định dạng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra mật khẩu: ít nhất 6 ký tự
+        if (password.length() < 6) {
+            Toast.makeText(RegisterPage.this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra mật khẩu có khớp không
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(RegisterPage.this, "Mật khẩu khống khớp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo đối tượng User để gửi lên API
+        User user = new User(phone, password);
+
+        // Gọi API đăng ký người dùng
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<Void> call = apiService.register(user);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Đăng ký thành công
+                    Toast.makeText(RegisterPage.this, "Đăng ký Thành Công", Toast.LENGTH_SHORT).show();
+                    // Chuyển sang màn hình đăng nhập
+                    Intent intent = new Intent(RegisterPage.this, LoginPage.class);
+                    startActivity(intent);
+                } else {
+                    // Nếu đăng ký thất bại
+                    if (response.code() == 400) {
+                        Toast.makeText(RegisterPage.this, "Số điện thoại đã tồn tại", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterPage.this, "Đăng Ký Thất Bại: " + response.message(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
             }
 
-            private void createUserInDatabase(FirebaseUser user) {
-                String userId = user.getUid();
-                DatabaseReference userRef = mDatabase.child("users").child(userId);
-
-                userRef.child("email").setValue(user.getEmail());
-                userRef.child("role").setValue(user.getEmail())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterPage.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(RegisterPage.this, "Lỗi khi lưu thông tin người dùng" + task.getException().getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(RegisterPage.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        });
+    }
 }

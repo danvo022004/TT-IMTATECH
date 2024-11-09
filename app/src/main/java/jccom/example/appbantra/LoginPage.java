@@ -4,196 +4,141 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
+import jccom.example.appbantra.API.ApiService;
+import jccom.example.appbantra.API.RetrofitClient;
+import jccom.example.appbantra.Model.LoginRequest;
+import jccom.example.appbantra.Model.AuthResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginPage extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
+    private TextInputEditText editTextSDT, editTextPassword;
+    private Button signIn;
+    private TextView signUp;
 
-    Button signIn;
-
-    TextView signUp;
-
-//    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-    public static  final String SHARED_PREFS = "sharedPrefs";
-
-    private FirebaseAuth mAuth;
-
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_page);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        editTextEmail = findViewById(R.id.email);
+        editTextSDT = findViewById(R.id.sdt);
         editTextPassword = findViewById(R.id.password);
         signIn = findViewById(R.id.sign_in);
         signUp = findViewById(R.id.sign_up);
 
-
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginPage.this, RegisterPage.class);
-                startActivity(intent);
-                finish();
-            }
+        // Chuyển hướng đến trang đăng ký
+        signUp.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginPage.this, RegisterPage.class);
+            startActivity(intent);
+            finish();
         });
 
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-                    public void onClick(View v) {
-                      loginUser();
-            }
-        });
-
-
-//        signIn.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                String email, password;
-//                email = String.valueOf(editTextEmail.getText());
-//                password = String.valueOf(editTextPassword.getText());
-//
-//                if(TextUtils.isEmpty(email)) {
-//                    Toast.makeText(LoginPage.this, "Enter Email", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if(TextUtils.isEmpty(email)) {
-//                    Toast.makeText(LoginPage.this, "Enter Password", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                firebaseAuth.signInWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                if(task.isSuccessful())
-//                                {
-//                                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-//                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//
-//                                    editor.putString("email", "true");
-//                                    editor.apply();
-//
-//                                    Toast.makeText(LoginPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(LoginPage.this, MainActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                } else {
-//                                    Toast.makeText(LoginPage.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//            }
-//        });
-
+        signIn.setOnClickListener(v -> loginUser());
     }
 
     private  void loginUser() {
-        String email = editTextEmail.getText().toString().trim();
+        String phone = editTextSDT.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        // Kiểm tra xem các trường nhập liệu có hợp lệ không
+        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
+            Toast.makeText(LoginPage.this, "Không được để rỗng", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            checkUserRole(user);
-                        } else {
-                            Toast.makeText(LoginPage.this, "Đăng nhập thất bại: " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+        // Kiểm tra số điện thoại
+        if (TextUtils.isEmpty(phone) || !Patterns.PHONE.matcher(phone).matches() || phone.length() < 10) {
+            Toast.makeText(LoginPage.this, "SĐT không đúng định dạng", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-    private void checkUserRole(FirebaseUser user) {
-        mDatabase.child("users").child(user.getUid()).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            String role = dataSnapshot.child("role").getValue(String.class);
-                            if ("admin".equals(role)) {
-                                Intent intent = new Intent(LoginPage.this, RevennueActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        } else {
-                            Toast.makeText(LoginPage.this, "Không tìm thấy thông tin người dùng",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+        // Kiểm tra mật khẩu: ít nhất 6 ký tự
+        if (password.length() < 6) {
+            Toast.makeText(LoginPage.this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo đối tượng LoginRequest
+        LoginRequest loginRequest = new LoginRequest(phone, password);
+
+        // Gửi yêu cầu đăng nhập
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<AuthResponse> call = apiService.login(loginRequest);
+
+        call.enqueue(new Callback<AuthResponse>() {
+            @Override
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Nhận token và thông tin người dùng
+                    String token = response.body().getToken();
+                    String userId = response.body().getUser().getId();
+                    String role = response.body().getUser().getRole();
+
+                    // Lưu token vào SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("TOKEN", token);
+                    editor.putString("USER_ID", userId);
+                    editor.putString("ROLE", role);
+                    editor.apply();
+
+                    // Kiểm tra role và điều hướng
+                    if (role.equals("admin")) {
+                        // Nếu là admin, chuyển đến màn hình admin
+                        Intent intent = new Intent(LoginPage.this, AdminActivity.class);
+                        startActivity(intent);
+                    } else {
+                        // Nếu là user, chuyển đến màn hình chính của người dùng
+                        Intent intent = new Intent(LoginPage.this, UserActivity.class);
+                        startActivity(intent);
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                       Toast.makeText(LoginPage.this, "Lỗi khi đọc dữ liệu: " + databaseError.getMessage(),
-                               Toast.LENGTH_SHORT).show();
-                    }
+                    finish(); // Đóng màn hình đăng nhập
+                } else {
+                    Toast.makeText(LoginPage.this, "Login failed! Please check your credentials", Toast.LENGTH_SHORT).show();
                 }
-        );
+            }
+
+            @Override
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
+                Toast.makeText(LoginPage.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+    // Phương thức kiểm tra token có hợp lệ không
+    private void checkToken() {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("TOKEN", null);
+        String userId = sharedPreferences.getString("USER_ID", null);
+        String role = sharedPreferences.getString("ROLE", null);
 
-// checkbox lưu tài khoản
-
-//    private void checkBox() {
-//        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-//        String check = sharedPreferences.getString("email", "");
-//        if(check.equals("true")) {
-//            Toast.makeText(LoginPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(LoginPage.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
+        if (token != null) {
+            // Token có hợp lệ, kiểm tra quyền và chuyển hướng
+            if (role != null) {
+                if (role.equals("admin")) {
+                    // Chuyển đến màn hình quản trị
+                    Intent intent = new Intent(LoginPage.this, AdminActivity.class);
+                    startActivity(intent);
+                } else {
+                    // Chuyển đến màn hình người dùng
+                    Intent intent = new Intent(LoginPage.this, UserActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }
+    }
 }
