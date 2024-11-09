@@ -53,7 +53,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // firebase Authentication
-//    implementation ("com.google.firebase:firebase-auth:23.0.0")
+//  implementation ("com.google.firebase:firebase-auth:23.0.0")
 
     implementation ("com.google.firebase:firebase-auth:22.3.0")
     implementation ("com.google.firebase:firebase-database:20.3.0")
