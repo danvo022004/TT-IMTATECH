@@ -48,7 +48,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.activity)
     implementation(libs.recyclerview)
-    implementation(libs.volley)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

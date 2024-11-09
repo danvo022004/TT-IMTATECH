@@ -10,6 +10,10 @@ import java.util.List;
 
 import jccom.example.appbantra.Model.Category;
 import jccom.example.appbantra.Model.Product;
+import java.util.List;
+
+import jccom.example.appbantra.Model.Category;
+import jccom.example.appbantra.Model.Product;
 import jccom.example.appbantra.Model.Revennue;
 import jccom.example.appbantra.Model.RevennueResponse;
 import jccom.example.appbantra.Model.User;
@@ -21,6 +25,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.Multipart;
 import retrofit2.http.Multipart;
 import retrofit2.http.PUT;
