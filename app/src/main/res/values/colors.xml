@@ -11,5 +11,10 @@
     <color name="lavender">#8692f7</color>
     <color name="green">#33865E</color>
     <color name="light_brown">#D68657</color>
-    <color name="oranger">#FF5722</color>
+    <color name="oranger">#EDFF5722</color>
+    <color name="colorAccent">#EDFF5722</color>
+    <color name="Silver">#C0C0C0</color>
+    <color name="xam">#DDDDDD</color>
+    <color name="colorGray">#D3D3D3</color> <!-- Màu xám nhạt -->
+    <color name="colorRed">#FF0000</color>  <!-- Màu đỏ -->
 </resources>

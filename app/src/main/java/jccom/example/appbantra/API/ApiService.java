@@ -1,13 +1,23 @@
 package jccom.example.appbantra.API;
 
+import java.util.List;
+
+import jccom.example.appbantra.Model.Category;
+import jccom.example.appbantra.Model.Product;
+import jccom.example.appbantra.Model.Revennue;
+import jccom.example.appbantra.Model.RevennueResponse;
 import jccom.example.appbantra.Model.User;
 import jccom.example.appbantra.Model.LoginRequest;
 import jccom.example.appbantra.Model.AuthResponse;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PUT;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -27,4 +37,69 @@ public interface ApiService {
     // Endpoint cập nhật thông tin người dùng
     @PUT("user/{id}")
     Call<User> updateUser(@Path("id") String userId, @Body User user);
+
+    @GET("revenue/by-product") // Adjust endpoint accordingly
+    Call<RevennueResponse> getRevenueByProduct();
+
+    // **Danh mục sản phẩm**
+
+    // Lấy danh sách danh mục
+    @GET("categories")
+    Call<List<Category>> getListCategory();
+
+    // Thêm danh mục mới
+    @POST("categories")
+    @Multipart
+    Call<Category> addCategory(@Part("name") String name,
+                               @Part("description") String description,
+                               @Part("imageUrl") String imageUrl);
+
+    // Cập nhật danh mục
+    @PUT("categories/{id}")
+    @Multipart
+    Call<Category> updateCategory(@Path("id") String id,
+                                  @Part("name") String name,
+                                  @Part("description") String description,
+                                  @Part("status") boolean status,
+                                  @Part("imageUrl") String imageUrl);
+    // Xóa danh mục
+    @DELETE("categories/{id}")
+    Call<Void> deleteCategory(@Path("id") String id);
+
+    // **Sản phẩm**
+    // Lấy danh sách tất cả sản phẩm
+    @GET("products")
+    Call<List<Product>> getListProduct();
+
+    // Lấy sản phẩm theo ID
+    @GET("products/{id}")
+    Call<Product> getProductById(@Path("id") String productId);
+
+    // Lấy danh sách sản phẩm theo categoryId
+    @GET("products/category/{categoryId}")
+    Call<List<Product>> getProductsByCategoryId(@Path("categoryId") String categoryId);
+
+    // Thêm sản phẩm mới
+    @POST("products")
+    @Multipart
+    Call<Product> addProduct(@Part("categoryId") String categoryId,
+                             @Part("name") String name,
+                             @Part("price") double price,
+                             @Part("description") String description,
+                             @Part MultipartBody.Part image);
+
+    // Cập nhật sản phẩm
+    @PUT("products/{id}")
+    @Multipart
+    Call<Product> updateProduct(@Path("id") String productId,
+                                @Part("categoryId") String categoryId,
+                                @Part("name") String name,
+                                @Part("price") double price,
+                                @Part("description") String description,
+                                @Part("status") boolean status,
+                                @Part MultipartBody.Part image);
+
+    // Xóa sản phẩm
+    @DELETE("products/{id}")
+    Call<Void> deleteProduct(@Path("id") String productId);
 }
