@@ -8,8 +8,9 @@
     <ImageView
         android:layout_width="300dp"
         android:layout_height="200dp"
-        android:src="@drawable/img_tra_1"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:src="@drawable/img_tra_1" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
