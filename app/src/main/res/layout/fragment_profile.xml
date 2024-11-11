@@ -46,6 +46,7 @@
             android:layout_marginTop="50dp">
 
             <TextView
+                android:id="@+id/tvCart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -55,7 +56,6 @@
                 android:textSize="20dp"/>
 
             <ImageView
-                android:id="@+id/thoat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_forward"/>
@@ -71,6 +71,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="50dp">
             <TextView
+                android:id="@+id/tvLogin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -79,7 +80,6 @@
                 android:textColor="@color/black"
                 android:textSize="20dp"/>
             <ImageView
-                android:id="@+id/dangnhap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_person"/>
@@ -94,6 +94,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="50dp">
             <TextView
+                android:id="@+id/tvRegister"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -102,7 +103,6 @@
                 android:textColor="@color/black"
                 android:textSize="20dp"/>
             <ImageView
-                android:id="@+id/dangky"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_person"
@@ -118,6 +118,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="50dp">
             <TextView
+                android:id="@+id/tvLogout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -126,7 +127,6 @@
                 android:textColor="@color/black"
                 android:textSize="20dp"/>
             <ImageView
-                android:id="@+id/dangxuat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_logout"
@@ -142,6 +142,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="50dp">
             <TextView
+                android:id="@+id/tvRevennue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
