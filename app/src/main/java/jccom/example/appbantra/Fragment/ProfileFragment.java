@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView tvUserName, tvLogin, tvRegister, tvLogout, tvRevennue;
+    private TextView tvUserName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,10 +48,6 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //anh xa
         tvUserName = view.findViewById(R.id.tvUserName);
-        tvLogin = view.findViewById(R.id.tvLogin);
-        tvRegister = view.findViewById(R.id.tvRegister);
-        tvLogout = view.findViewById(R.id.tvLogout);
-
 
         // Lấy userId từ SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
@@ -86,30 +82,6 @@ public class ProfileFragment extends Fragment {
             // Xử lý khi không có userId trong SharedPreferences
             tvUserName.setText("User not logged in");
         }
-
-//        tvLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), LoginPage.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        tvRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), RegisterPage.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        tvRevennue.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), RevennueFragment.class);
-//                startActivity(intent);
-//            }
-//        });
 
     }
 }
