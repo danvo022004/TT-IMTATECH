@@ -11,9 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import java.util.List;
+
+import jccom.example.appbantra.API.RetrofitClient;
 import jccom.example.appbantra.Model.CartItem;
+import jccom.example.appbantra.Model.CartResponse;
+import jccom.example.appbantra.Model.Product;
 import jccom.example.appbantra.R;
+import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
@@ -68,8 +72,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         }
 
         void bind(final CartItem item) {
-            if (item.getProduct() != null) {
-                String imageUrl = item.getProduct().getImageUrl();
+            Product product = item.getProductId();
+
+            if (product != null) {
+                String imageUrl = product.getImageUrl();
                 if (imageUrl != null && !imageUrl.isEmpty()) {
                     Glide.with(itemView.getContext())
                             .load(imageUrl)
@@ -79,41 +85,66 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                                     .diskCacheStrategy(DiskCacheStrategy.ALL))
                             .into(productImage);
                 } else {
-                    Log.e("CartAdapter", "Image URL is null or empty for product: " + item.getProduct().getName());
                     productImage.setImageResource(R.drawable.error_image);
                 }
-                productName.setText(item.getProduct().getName());
-                productDescription.setText(item.getProduct().getDescription());
-                productPrice.setText(String.format("%,.0fđ", item.getProduct().getPrice() * item.getQuantity()));
+
+                productName.setText(product.getName());
+                productDescription.setText(product.getDescription());
+                productPrice.setText(String.format("%,.0fđ", product.getPrice() * item.getQuantity()));
             } else {
-                Log.e("CartAdapter", "Product is null in CartItem");
+                productName.setText("No product");
+                productDescription.setText("No description");
+                productPrice.setText("0đ");
+                productImage.setImageResource(R.drawable.error_image);
             }
 
             quantityText.setText(String.valueOf(item.getQuantity()));
 
-            itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onItemClick(item);
-                }
-            });
-
+            // Xử lý sự kiện giảm số lượng
             decreaseQuantity.setOnClickListener(v -> {
-                if (listener != null && item.getQuantity() > 1) {
-                    listener.onUpdateQuantity(item, item.getQuantity() - 1);
+                if (item.getQuantity() > 1) {
+                    int newQuantity = item.getQuantity() - 1;
+                    item.setQuantity(newQuantity);
+                    quantityText.setText(String.valueOf(newQuantity));
+                    listener.onUpdateQuantity(item, newQuantity);
                 }
             });
 
+            // Xử lý sự kiện tăng số lượng
             increaseQuantity.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onUpdateQuantity(item, item.getQuantity() + 1);
-                }
+                int newQuantity = item.getQuantity() + 1;
+                item.setQuantity(newQuantity);
+                quantityText.setText(String.valueOf(newQuantity));
+                listener.onUpdateQuantity(item, newQuantity);
             });
 
+            // Xử lý sự kiện xóa sản phẩm
             removeItem.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onRemoveItem(item);
-                }
+                // Lấy thông tin token và productId
+                String token = "Bearer " + "your_token_here"; // Thay thế với token hợp lệ
+                String productId = item.getProductId().getId(); // Lấy productId từ CartItem
+
+                // Gọi API xóa sản phẩm
+                RetrofitClient.getApiService().removeProductFromCart(token, productId)
+                        .enqueue(new retrofit2.Callback<CartResponse>() {
+                            @Override
+                            public void onResponse(retrofit2.Call<CartResponse> call, retrofit2.Response<CartResponse> response) {
+                                if (response.isSuccessful()) {
+                                    // Nếu xóa thành công, cập nhật lại giỏ hàng
+                                    Log.d("CartAdapter", "Product removed successfully.");
+                                    listener.onRemoveItem(item); // Cập nhật lại giỏ hàng sau khi xóa sản phẩm
+                                } else {
+                                    Log.d("CartAdapter", "Failed to remove product: " + response.message());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(retrofit2.Call<CartResponse> call, Throwable t) {
+                                Log.d("CartAdapter", "Error: " + t.getMessage());
+                            }
+                        });
             });
+
         }
     }
 

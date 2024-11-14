@@ -72,5 +72,6 @@ dependencies {
 
     implementation ("com.github.bumptech.glide:glide:4.15.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")
+    implementation ("androidx.core:core:1.10.0")
 
 }

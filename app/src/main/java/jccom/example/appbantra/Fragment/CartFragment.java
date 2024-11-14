@@ -106,15 +106,15 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
 
     @Override
     public void onItemClick(CartItem item) {
-        if (item.getProduct() != null) {
-            Toast.makeText(getContext(), "Đã chọn: " + item.getProduct().getName(), Toast.LENGTH_SHORT).show();
+        if (item.getProductId() != null) {
+            Toast.makeText(getContext(), "Đã chọn: " + item.getProductId().getName(), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onItemSelected(CartItem item) {
-        if (item.getProduct() != null) {
-            String productId = item.getProduct().getId();
+        if (item.getProductId() != null) {
+            String productId = item.getProductId().getId();
             if (selectedProductIds.contains(productId)) {
                 selectedProductIds.remove(productId);
             } else {
@@ -150,8 +150,8 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
 
     @Override
     public void onRemoveItem(CartItem item) {
-        if (item.getProduct() != null) {
-            removeProductFromCart(item.getProduct().getId());
+        if (item.getProductId() != null) {
+            removeProductFromCart(item.getProductId().getId());
         } else {
             Log.e("CartFragment", "Cannot remove item: Product is null");
         }
@@ -159,8 +159,8 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
 
     @Override
     public void onUpdateQuantity(CartItem item, int newQuantity) {
-        if (item.getProduct() != null) {
-            updateProductQuantity(item.getProduct().getId(), newQuantity);
+        if (item.getProductId() != null) {
+            updateProductQuantity(item.getProductId().getId(), newQuantity);
         } else {
             Log.e("CartFragment", "Cannot update quantity: Product is null");
         }

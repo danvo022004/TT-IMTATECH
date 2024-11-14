@@ -129,4 +129,10 @@ public interface ApiService {
 
     @POST("cart/calculate-selected-total")
     Call<CartResponse> calculateSelectedTotal(@Header("Authorization") String token, @Body List<String> selectedProductIds);
+
+    @PUT("orders/updateStatus/{id}")
+    Call<Order> updateOrderStatus(@Path("id") String orderId, @Body StatusUpdate statusUpdate);
+
+    @GET("orders/all")
+    Call<OrderResponse> getAllUsersOrders();
 }
