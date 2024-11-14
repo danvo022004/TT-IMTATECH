@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.HomeFragment">
 
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerlayout"
         android:layout_width="match_parent"
@@ -69,37 +70,13 @@
                         android:orientation="horizontal"
                         android:padding="10dp"
                         android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:text="Phẩm Trà"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:background="@drawable/khung" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Bạch trà cao cấp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="20dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hồng trà cao cấp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="20dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lục trà cao cấp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="20dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phổ Thiên Shan Cao Cấp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="20dp"/>
+
+                        <!-- RecyclerView for categories -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/categoryRecyclerView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
                     </LinearLayout>
                 </HorizontalScrollView>
 
@@ -108,9 +85,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="5dp">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="10dp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.drawerlayout.widget.DrawerLayout>

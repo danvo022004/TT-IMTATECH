@@ -1,58 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- Hình ảnh sản phẩm -->
+    <ImageView
+        android:id="@+id/product_image_cart"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars"
+        android:contentDescription="Hình ảnh sản phẩm" />
+
+    <!-- Tên sản phẩm -->
+    <TextView
+        android:id="@+id/product_name_cart"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp">
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/product_image_cart"
+        app:layout_constraintTop_toTopOf="@id/product_image_cart"
+        app:layout_constraintEnd_toStartOf="@id/remove_item_cart"
+        tools:text="Tên sản phẩm" />
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="80dp"
-            android:src="@drawable/img_tra_1"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amata"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tinh chất trà Shan Tuyết cổ thụ"
-                    android:layout_marginTop="5dp"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_check_circle"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="350.000đ"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+    <!-- Mô tả sản phẩm -->
+    <TextView
+        android:id="@+id/product_description_cart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="@id/product_name_cart"
+        app:layout_constraintTop_toBottomOf="@id/product_name_cart"
+        app:layout_constraintEnd_toStartOf="@id/remove_item_cart"
+        tools:text="Mô tả sản phẩm" />
 
-</LinearLayout>
+    <!-- Giá sản phẩm -->
+    <TextView
+        android:id="@+id/product_price_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/product_name_cart"
+        app:layout_constraintBottom_toBottomOf="@id/product_image_cart"
+        tools:text="100,000đ" />
+
+    <!-- Nút Xóa sản phẩm -->
+    <ImageView
+        android:id="@+id/remove_item_cart"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Xóa sản phẩm" />
+
+    <!-- Nút giảm số lượng -->
+    <ImageView
+        android:id="@+id/decrease_quantity_cart"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@android:drawable/ic_media_rew"
+        app:layout_constraintEnd_toStartOf="@id/quantity_text_cart"
+        app:layout_constraintTop_toTopOf="@id/quantity_text_cart"
+        app:layout_constraintBottom_toBottomOf="@id/quantity_text_cart"
+        android:contentDescription="Giảm số lượng" />
+
+    <!-- TextView số lượng -->
+    <TextView
+        android:id="@+id/quantity_text_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="30dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/increase_quantity_cart"
+        app:layout_constraintBottom_toBottomOf="@id/product_image_cart"
+        tools:text="1" />
+
+    <!-- Nút tăng số lượng -->
+    <ImageView
+        android:id="@+id/increase_quantity_cart"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@android:drawable/ic_media_ff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/quantity_text_cart"
+        app:layout_constraintBottom_toBottomOf="@id/quantity_text_cart"
+        android:contentDescription="Tăng số lượng" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
