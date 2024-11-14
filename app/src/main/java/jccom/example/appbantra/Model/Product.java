@@ -9,6 +9,7 @@ public class Product {
     private String description;
     private boolean status;
 
+
     public Product(String _id, String categoryId, String name, String imageUrl, double price, String description, boolean status) {
         this._id = _id;
         this.categoryId = categoryId;
@@ -17,9 +18,6 @@ public class Product {
         this.price = price;
         this.description = description;
         this.status = status;
-    }
-
-    public Product() {
     }
 
     public String getId() {

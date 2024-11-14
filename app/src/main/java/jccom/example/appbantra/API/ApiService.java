@@ -65,9 +65,12 @@ public interface ApiService {
     @DELETE("categories/{id}")
     Call<Void> deleteCategory(@Path("id") String id);
 
+    // **Sản phẩm**
+    // Lấy danh sách tất cả sản phẩm
     @GET("products")
     Call<List<Product>> getListProduct();
 
+    // Lấy sản phẩm theo ID
     @GET("products/{id}")
     Call<Product> getProductById(@Path("id") String productId);
 
