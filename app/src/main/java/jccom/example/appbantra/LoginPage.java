@@ -35,10 +35,6 @@ public class LoginPage extends AppCompatActivity {
 
         initializeViews();
 
-        // Kiểm tra token khi mở ứng dụng
-//        checkToken();
-
-        // Chuyển hướng đến trang đăng ký
         signUp.setOnClickListener(view -> {
             Intent intent = new Intent(LoginPage.this, RegisterPage.class);
             startActivity(intent);
@@ -59,13 +55,10 @@ public class LoginPage extends AppCompatActivity {
         String phone = editTextSDT.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        // Kiểm tra tính hợp lệ của đầu vào
         if (!isInputValid(phone, password)) return;
 
-        // Tạo đối tượng LoginRequest
         LoginRequest loginRequest = new LoginRequest(phone, password);
 
-        // Gửi yêu cầu đăng nhập
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<AuthResponse> call = apiService.login(loginRequest);
         call.enqueue(new Callback<AuthResponse>() {
@@ -104,8 +97,8 @@ public class LoginPage extends AppCompatActivity {
         if (response.isSuccessful() && response.body() != null) {
             AuthResponse authResponse = response.body();
             saveUserData(authResponse);
-            navigateToMainActivity(authResponse.getUser().getRole());
-            finish(); // Đóng màn hình đăng nhập
+            navigateToMainActivity();
+            finish();
         } else {
             Toast.makeText(LoginPage.this, "Đăng nhập thất bại! Vui lòng kiểm tra thông tin", Toast.LENGTH_SHORT).show();
         }
@@ -116,27 +109,11 @@ public class LoginPage extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("TOKEN", authResponse.getToken());
         editor.putString("USER_ID", authResponse.getUser().getId());
-        editor.putString("ROLE", authResponse.getUser().getRole());
         editor.apply();
     }
 
-    private void navigateToMainActivity(String role) {
-        Intent intent;
-        if ("admin".equals(role)) {
-            intent = new Intent(LoginPage.this, Main_AdActivity.class);
-        } else {
-            intent = new Intent(LoginPage.this, MainActivity.class);
-        }
+    private void navigateToMainActivity() {
+        Intent intent = new Intent(LoginPage.this, OrderActivity.class);
         startActivity(intent);
     }
-
-//    private void checkToken() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-//        String token = sharedPreferences.getString("TOKEN", null);
-//        String role = sharedPreferences.getString("ROLE", null);
-//
-//        if (token != null) {
-//            navigateToMainActivity(role);
-//        }
-//    }
 }

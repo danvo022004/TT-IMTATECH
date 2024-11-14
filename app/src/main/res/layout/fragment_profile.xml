@@ -48,7 +48,7 @@
             android:layout_marginTop="50dp">
 
             <TextView
-                android:id="@+id/tvCart"
+                android:id="@+id/tvoderuser"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -67,49 +67,12 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/black"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="50dp">
-            <TextView
-                android:id="@+id/tvLogin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Đăng nhập"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="20dp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_person"/>
-        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/black"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="50dp">
-            <TextView
-                android:id="@+id/tvRegister"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Đăng ký"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="20dp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_person"
-                android:layout_marginStart="270dp"/>
-        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

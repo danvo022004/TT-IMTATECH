@@ -25,6 +25,7 @@ import jccom.example.appbantra.API.RetrofitClient;
 import jccom.example.appbantra.FragmentAd.RevennueFragment;
 import jccom.example.appbantra.LoginPage;
 import jccom.example.appbantra.Model.User;
+import jccom.example.appbantra.OrderActivity;
 import jccom.example.appbantra.R;
 import jccom.example.appbantra.RegisterPage;
 import retrofit2.Call;
@@ -48,6 +49,11 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //anh xa
         tvUserName = view.findViewById(R.id.tvUserName);
+        TextView tvOderUser = view.findViewById(R.id.tvoderuser);
+        tvOderUser.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), OrderActivity.class);
+            startActivity(intent);
+        });
 
         // Lấy userId từ SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
