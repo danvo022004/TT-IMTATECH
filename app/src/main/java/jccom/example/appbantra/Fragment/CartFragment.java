@@ -1,5 +1,6 @@
 package jccom.example.appbantra.Fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import jccom.example.appbantra.API.ApiService;
 import jccom.example.appbantra.API.RetrofitClient;
+import jccom.example.appbantra.CheckoutActivity;
 import jccom.example.appbantra.Model.CartItem;
 import jccom.example.appbantra.Model.CartResponse;
 import jccom.example.appbantra.Model.CartRequest;
@@ -38,6 +40,9 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
     private ApiService apiService;
     private List<String> selectedProductIds;
     private String token;
+    // Khai báo totalAmount ở đây
+    private double totalAmount = 0.0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +65,29 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
         cartAdapter = new CartAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(cartAdapter);
 
-        checkoutButton.setOnClickListener(v -> performCheckout());
+        checkoutButton.setOnClickListener(v -> {
+            // Lấy tất cả các productId từ danh sách giỏ hàng thông qua phương thức getter
+            List<String> allProductIds = new ArrayList<>();
+            for (CartItem item : cartAdapter.getItems()) { // Sử dụng phương thức getter
+                if (item.getProductId() != null) {
+                    allProductIds.add(item.getProductId().getId()); // Lấy productId và thêm vào danh sách
+                }
+            }
+
+            // Kiểm tra xem có sản phẩm nào trong giỏ hàng không
+            if (!allProductIds.isEmpty()) {
+                // Gửi ID sản phẩm và tổng tiền sang CheckoutActivity
+                Intent intent = new Intent(getContext(), CheckoutActivity.class);
+                intent.putStringArrayListExtra("selectedProductIds", new ArrayList<>(allProductIds)); // Chuyển danh sách các ID sản phẩm
+                intent.putExtra("totalAmount", totalAmount); // Chuyển tổng tiền
+                startActivity(intent);
+            } else {
+                // Nếu không có sản phẩm nào trong giỏ, thông báo cho người dùng
+                Toast.makeText(getContext(), "Giỏ hàng trống, không có sản phẩm để thanh toán!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         // Retrieve token from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
@@ -82,7 +109,11 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
                     CartResponse cartResponse = response.body();
                     if (cartResponse.getCart() != null && cartResponse.getCart().getProducts() != null) {
                         cartAdapter.updateItems(cartResponse.getCart().getProducts());
-                        updateTotalPrice(cartResponse.getTotalAmount());
+
+                        // Cập nhật lại tổng tiền từ API
+                        totalAmount = cartResponse.getTotalAmount();
+                        updateTotalPrice(totalAmount); // Hiển thị tổng tiền mới
+
                     } else {
                         Toast.makeText(getContext(), "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                     }
@@ -100,9 +131,11 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
         });
     }
 
+
     private void updateTotalPrice(double totalAmount) {
         totalPriceTextView.setText(String.format("Tổng tiền: %,.0fđ", totalAmount));
     }
+
 
     @Override
     public void onItemClick(CartItem item) {
@@ -151,6 +184,8 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
     @Override
     public void onRemoveItem(CartItem item) {
         if (item.getProductId() != null) {
+            double removedItemPrice = item.getProductId().getPrice() * item.getQuantity();
+            onUpdateTotalPrice(-removedItemPrice); // Trừ giá của sản phẩm đã xóa
             removeProductFromCart(item.getProductId().getId());
         } else {
             Log.e("CartFragment", "Cannot remove item: Product is null");
@@ -160,11 +195,21 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemListen
     @Override
     public void onUpdateQuantity(CartItem item, int newQuantity) {
         if (item.getProductId() != null) {
+            double oldTotalPrice = item.getProductId().getPrice() * item.getQuantity();
+            double newTotalPrice = item.getProductId().getPrice() * newQuantity;
+            onUpdateTotalPrice(newTotalPrice - oldTotalPrice); // Cập nhật sự thay đổi số lượng
             updateProductQuantity(item.getProductId().getId(), newQuantity);
         } else {
             Log.e("CartFragment", "Cannot update quantity: Product is null");
         }
     }
+
+    @Override
+    public void onUpdateTotalPrice(double priceChange) {
+        totalAmount += priceChange;
+        updateTotalPrice(totalAmount);
+    }
+
 
     private void removeProductFromCart(String productId) {
         Call<CartResponse> call = apiService.removeProductFromCart("Bearer " + token, productId);

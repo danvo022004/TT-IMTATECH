@@ -54,6 +54,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         notifyDataSetChanged();
     }
 
+    // Thêm phương thức getter cho items
+    public List<CartItem> getItems() {
+        return items;
+    }
+
     class CartViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
         TextView productName, productDescription, productPrice, quantityText;
@@ -90,7 +95,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
                 productName.setText(product.getName());
                 productDescription.setText(product.getDescription());
-                productPrice.setText(String.format("%,.0fđ", product.getPrice() * item.getQuantity()));
+                updatePrice(item);
             } else {
                 productName.setText("No product");
                 productDescription.setText("No description");
@@ -104,48 +109,68 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             decreaseQuantity.setOnClickListener(v -> {
                 if (item.getQuantity() > 1) {
                     int newQuantity = item.getQuantity() - 1;
-                    item.setQuantity(newQuantity);
-                    quantityText.setText(String.valueOf(newQuantity));
-                    listener.onUpdateQuantity(item, newQuantity);
+                    updateQuantity(item, newQuantity);
                 }
             });
 
             // Xử lý sự kiện tăng số lượng
             increaseQuantity.setOnClickListener(v -> {
                 int newQuantity = item.getQuantity() + 1;
-                item.setQuantity(newQuantity);
-                quantityText.setText(String.valueOf(newQuantity));
-                listener.onUpdateQuantity(item, newQuantity);
+                updateQuantity(item, newQuantity);
             });
 
             // Xử lý sự kiện xóa sản phẩm
-            removeItem.setOnClickListener(v -> {
-                // Lấy thông tin token và productId
-                String token = "Bearer " + "your_token_here"; // Thay thế với token hợp lệ
-                String productId = item.getProductId().getId(); // Lấy productId từ CartItem
-
-                // Gọi API xóa sản phẩm
-                RetrofitClient.getApiService().removeProductFromCart(token, productId)
-                        .enqueue(new retrofit2.Callback<CartResponse>() {
-                            @Override
-                            public void onResponse(retrofit2.Call<CartResponse> call, retrofit2.Response<CartResponse> response) {
-                                if (response.isSuccessful()) {
-                                    // Nếu xóa thành công, cập nhật lại giỏ hàng
-                                    Log.d("CartAdapter", "Product removed successfully.");
-                                    listener.onRemoveItem(item); // Cập nhật lại giỏ hàng sau khi xóa sản phẩm
-                                } else {
-                                    Log.d("CartAdapter", "Failed to remove product: " + response.message());
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(retrofit2.Call<CartResponse> call, Throwable t) {
-                                Log.d("CartAdapter", "Error: " + t.getMessage());
-                            }
-                        });
-            });
-
+            removeItem.setOnClickListener(v -> removeProduct(item));
         }
+
+        private void updateQuantity(CartItem item, int newQuantity) {
+            item.setQuantity(newQuantity);
+            quantityText.setText(String.valueOf(newQuantity));
+            updatePrice(item);
+            listener.onUpdateQuantity(item, newQuantity);
+        }
+
+        private void updatePrice(CartItem item) {
+            Product product = item.getProductId();
+            if (product != null) {
+                double totalPrice = product.getPrice() * item.getQuantity();
+                productPrice.setText(String.format("%,.0fđ", totalPrice));
+            }
+        }
+
+        private void removeProduct(CartItem item) {
+            String token = "Bearer " + "your_token_here"; // Replace with actual token retrieval logic
+            String productId = item.getProductId().getId();
+
+            RetrofitClient.getApiService().removeProductFromCart(token, productId)
+                    .enqueue(new retrofit2.Callback<CartResponse>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<CartResponse> call, retrofit2.Response<CartResponse> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("CartAdapter", "Product removed successfully.");
+                                int position = getAdapterPosition();
+                                if (position != RecyclerView.NO_POSITION) {
+                                    double removedItemPrice = item.getProductId().getPrice() * item.getQuantity();
+                                    items.remove(position);
+                                    notifyItemRemoved(position);
+                                    updateTotalPrice(-removedItemPrice);
+                                    listener.onRemoveItem(item);
+                                }
+                            } else {
+                                Log.d("CartAdapter", "Failed to remove product: " + response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<CartResponse> call, Throwable t) {
+                            Log.d("CartAdapter", "Error: " + t.getMessage());
+                        }
+                    });
+        }
+    }
+
+    private void updateTotalPrice(double priceChange) {
+        listener.onUpdateTotalPrice(priceChange);
     }
 
     public interface CartItemListener {
@@ -153,5 +178,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         void onItemSelected(CartItem item);
         void onRemoveItem(CartItem item);
         void onUpdateQuantity(CartItem item, int newQuantity);
+        void onUpdateTotalPrice(double priceChange);
     }
 }

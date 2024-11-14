@@ -2,6 +2,8 @@ package jccom.example.appbantra.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Order {
     @SerializedName("order_id") // Ánh xạ `order_id` từ JSON API
     private String id;
@@ -13,11 +15,12 @@ public class Order {
     private double price;
     private double total_price;
     private String status; // Trạng thái đơn hàng
+    private List<String> productIds;
 
     public Order() {
     }
 
-    public Order(String id, String paymentMethod, String product_id, String product_name, int quantity, double price, double total_price, String status) {
+    public Order(String id, String paymentMethod, String product_id, String product_name, int quantity, double price, double total_price, String status, List<String> productIds) {
         this.id = id;
         this.paymentMethod = paymentMethod;
         this.product_id = product_id;
@@ -26,14 +29,7 @@ public class Order {
         this.price = price;
         this.total_price = total_price;
         this.status = status;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+        this.productIds = productIds;
     }
 
     public String getId() {
@@ -44,7 +40,14 @@ public class Order {
         this.id = id;
     }
 
-    // Getter và Setter cho product_id
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     public String getProduct_id() {
         return product_id;
     }
@@ -53,7 +56,6 @@ public class Order {
         this.product_id = product_id;
     }
 
-    // Getter và Setter cho product_name
     public String getProduct_name() {
         return product_name;
     }
@@ -62,25 +64,6 @@ public class Order {
         this.product_name = product_name;
     }
 
-    // Getter và Setter cho price
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    // Getter và Setter cho total_price
-    public double getTotal_price() {
-        return total_price;
-    }
-
-    public void setTotal_price(double total_price) {
-        this.total_price = total_price;
-    }
-
-    // Getter và Setter cho quantity
     public int getQuantity() {
         return quantity;
     }
@@ -89,12 +72,35 @@ public class Order {
         this.quantity = quantity;
     }
 
-    // Getter và Setter cho status
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getTotal_price() {
+        return total_price;
+    }
+
+    public void setTotal_price(double total_price) {
+        this.total_price = total_price;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<String> getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(List<String> productIds) {
+        this.productIds = productIds;
     }
 }

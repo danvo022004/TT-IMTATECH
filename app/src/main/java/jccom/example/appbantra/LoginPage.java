@@ -113,7 +113,7 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void navigateToMainActivity() {
-        Intent intent = new Intent(LoginPage.this, OrderActivity.class);
+        Intent intent = new Intent(LoginPage.this, MainActivity.class);
         startActivity(intent);
     }
 }

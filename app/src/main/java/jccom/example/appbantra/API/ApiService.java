@@ -28,19 +28,15 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    // Endpoint cho đăng ký người dùng
     @POST("register")
     Call<Void> register(@Body User user);
 
-    // Endpoint cho đăng nhập người dùng
     @POST("login")
     Call<AuthResponse> login(@Body LoginRequest loginRequest);
 
-    // Endpoint lấy thông tin người dùng
     @GET("user/{id}")
     Call<User> getUser(@Path("id") String userId);
 
-    // Endpoint cập nhật thông tin người dùng
     @PUT("user/{id}")
     Call<User> updateUser(@Path("id") String userId, @Body User user);
 
@@ -49,20 +45,20 @@ public interface ApiService {
     @GET("revenue/products")
     Call<RevenueResponse> getRevenueByProduct();
 
-    // **Danh mục sản phẩm**
+//    @POST("/orders")
+//    Call<Order> placeOrder(@Header("Authorization") String token, @Body Order order);
+
 
 
     @GET("categories")
     Call<List<Category>> getListCategory();
 
-    // Thêm danh mục mới
     @POST("categories")
     @Multipart
     Call<Category> addCategory(@Part("name") String name,
                                @Part("description") String description,
                                @Part("imageUrl") String imageUrl);
 
-    // Cập nhật danh mục
     @PUT("categories/{id}")
     @Multipart
     Call<Category> updateCategory(@Path("id") String id,
@@ -111,20 +107,19 @@ public interface ApiService {
             @Part MultipartBody.Part image
     );
 
-    // Xóa sản phẩm
     @DELETE("products/{id}")
     Call<Void> deleteProduct(@Path("id") String productId);
 
-    @GET("orders/all")
-    Call<OrderResponse> getAllUsersOrders();
+    // View Cart
 
-    @PUT("orders/updateStatus/{id}")
-    Call<Order> updateOrderStatus(@Path("id") String orderId, @Body StatusUpdate statusUpdate);
-
-    @GET("order")
-    Call<OrderResponse> getOriginalOrders(@Header("Authorization") String authToken);
-
-
+    // View Cart
+//    @GET("cart")
+//    Call<CartResponse> viewCart();
+//
+//    // Add to Cart
+//    // Endpoint thêm sản phẩm vào giỏ hàng
+//    @POST("cart")
+//    Call<CartResponse> addToCart(@Header("Authorization") String token, @Body int cartRequest);
 
     @GET("cart")
     Call<CartResponse> viewCart(@Header("Authorization") String token);
@@ -137,4 +132,20 @@ public interface ApiService {
 
     @POST("cart/calculate-selected-total")
     Call<CartResponse> calculateSelectedTotal(@Header("Authorization") String token, @Body List<String> selectedProductIds);
+
+    @PUT("orders/updateStatus/{id}")
+    Call<Order> updateOrderStatus(@Path("id") String orderId, @Body StatusUpdate statusUpdate);
+
+    @GET("orders/all")
+    Call<OrderResponse> getAllUsersOrders();
+
+
+    //    @POST("orders/confirm") // Cập nhật đường dẫn cho đúng endpoint
+//    Call<Order> placeOrder(@Header("Authorization") String token, @Body Order order);
+    @POST("order/confirm")
+    Call<Order> placeOrder(@Header("Authorization") String token, @Body Order order);
+
+    @GET("order")
+    Call<OrderResponse> getOriginalOrders(@Header("Authorization") String authToken);
+
 }

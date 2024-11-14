@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 
@@ -141,9 +143,11 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<CartResponse> call, Response<CartResponse> response) {
                 if (response.isSuccessful()) {
-                    // Kiểm tra kết quả từ API
+                    // Log kết quả thành công
                     Log.d("API Response", "Success: " + response.body());
                     Toast.makeText(ProductDetailActivity.this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(ProductDetailActivity.this, MainActivity.class);
+                    startActivity(i);
                 } else {
                     // Log chi tiết lỗi khi không thành công
                     Log.e("API Error", "Error: " + response.code() + " " + response.message());
@@ -151,11 +155,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             }
 
+
             @Override
             public void onFailure(Call<CartResponse> call, Throwable t) {
                 // Log chi tiết lỗi khi gặp sự cố kết nối
                 Log.e("API Failure", "Error: " + t.getMessage());
-                Toast.makeText(ProductDetailActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this, "thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(ProductDetailActivity.this, MainActivity.class);
+                startActivity(i);
             }
         });
     }

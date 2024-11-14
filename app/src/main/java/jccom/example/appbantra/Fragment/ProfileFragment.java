@@ -37,6 +37,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView tvUserName;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
