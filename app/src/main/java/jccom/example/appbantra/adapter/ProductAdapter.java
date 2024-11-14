@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jccom.example.appbantra.Model.Product;
@@ -20,7 +21,7 @@ import jccom.example.appbantra.R;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private List<Product> productList;
-    private OnProductClickListener onProductClickListener; // Thêm listener
+    private OnProductClickListener onProductClickListener;
 
     // Interface để lắng nghe sự kiện nhấp vào sản phẩm
     public interface OnProductClickListener {
@@ -29,14 +30,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     // Constructor nhận vào danh sách sản phẩm và listener
     public ProductAdapter(List<Product> productList, OnProductClickListener listener) {
-        this.productList = productList;
-        this.onProductClickListener = listener; // Khởi tạo listener
+        this.productList = productList != null ? productList : new ArrayList<>(); // Kiểm tra null
+        this.onProductClickListener = listener;
     }
 
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate layout item_home.xml
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
         return new ProductViewHolder(itemView);
     }
@@ -57,15 +57,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         // Thiết lập sự kiện nhấp vào sản phẩm
         holder.itemView.setOnClickListener(v -> {
             if (onProductClickListener != null) {
-                onProductClickListener.onProductClick(product.getId());
-                Log.d("ProductAdapter", "Clicked Product ID: " + product.getId()); // Ghi log ID khi nhấp
+                String productId = product.getId();
+                if (productId != null) {
+                    onProductClickListener.onProductClick(productId);
+                    Log.d("ProductAdapter", "Clicked Product ID: " + productId);
+                } else {
+                    Log.e("ProductAdapter", "Product ID is null");
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return productList != null ? productList.size() : 0;
+        return productList.size();
     }
 
     // ViewHolder cho mỗi item
