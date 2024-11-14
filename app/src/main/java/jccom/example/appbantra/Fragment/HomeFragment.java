@@ -179,6 +179,7 @@ public class HomeFragment extends Fragment {
                     intent.putExtra("product_name", clickedProduct.getName());
                     intent.putExtra("product_price", String.valueOf(clickedProduct.getPrice()));
                     intent.putExtra("product_description", clickedProduct.getDescription());
+                    intent.putExtra("product_id", clickedProduct.getId());
                     startActivity(intent);
                 }
             }

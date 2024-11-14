@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +21,7 @@ import retrofit2.Response;
 
 public class RegisterPage extends AppCompatActivity {
 
-    private TextInputEditText editTextSDT, editTextPassword, editTextConfirmPassword, editTextName, editTextEmail;
+    private TextInputEditText editTextName, editTextSDT, editTextPassword, editTextConfirmPassword;
     private Button signUp;
     private TextView signIn;
 
@@ -32,6 +31,7 @@ public class RegisterPage extends AppCompatActivity {
         setContentView(R.layout.activity_register_page);
 
         // Lấy tham chiếu các View
+        editTextName = findViewById(R.id.username);
         editTextSDT = findViewById(R.id.sdt);
         editTextPassword = findViewById(R.id.password);
         editTextConfirmPassword = findViewById(R.id.cofirmpassword);
@@ -51,13 +51,13 @@ public class RegisterPage extends AppCompatActivity {
     }
 
     private void registerUser() {
-        // Lấy giá trị từ các input
+        // Lấy giá trị từ các input'
+        String name = editTextName.getText().toString().trim();
         String phone = editTextSDT.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
-
         // Kiểm tra xem các trường có rỗng không
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword) ) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword) ) {
             Toast.makeText(RegisterPage.this, "Không được để rỗng", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -81,7 +81,7 @@ public class RegisterPage extends AppCompatActivity {
         }
 
         // Tạo đối tượng User để gửi lên API
-        User user = new User(phone, password);
+        User user = new User(name, phone, password);
 
         // Gọi API đăng ký người dùng
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
