@@ -10,7 +10,6 @@ import jccom.example.appbantra.Model.Product;
 import jccom.example.appbantra.Model.RevenueResponse;
 import jccom.example.appbantra.Model.StatusUpdate;
 import jccom.example.appbantra.Model.TotalRevenueResponse;
-import jccom.example.appbantra.Model.RevennueResponse;
 import jccom.example.appbantra.Model.User;
 import jccom.example.appbantra.Model.LoginRequest;
 import jccom.example.appbantra.Model.AuthResponse;
