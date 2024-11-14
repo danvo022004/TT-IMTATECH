@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -20,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".OrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".PayMentActivity"
             android:exported="false" />
         <activity
@@ -27,17 +29,10 @@
             android:exported="false"
             android:theme="@style/Theme.AppBanTra" />
         <activity
-            android:name=".Fragment.DetailActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppBanTra" />
-        <activity
             android:name=".Main_AdActivity"
             android:exported="false" />
         <activity
             android:name=".UserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminActivity"
             android:exported="false" />
         <activity
             android:name=".Details_Activity"

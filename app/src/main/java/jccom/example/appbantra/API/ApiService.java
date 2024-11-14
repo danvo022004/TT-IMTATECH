@@ -2,18 +2,24 @@ package jccom.example.appbantra.API;
 
 import java.util.List;
 
+import jccom.example.appbantra.Model.CartRequest;
+import jccom.example.appbantra.Model.CartResponse;
 import jccom.example.appbantra.Model.Category;
+import jccom.example.appbantra.Model.Order;
 import jccom.example.appbantra.Model.Product;
-import jccom.example.appbantra.Model.Revennue;
-import jccom.example.appbantra.Model.RevennueResponse;
+import jccom.example.appbantra.Model.RevenueResponse;
+import jccom.example.appbantra.Model.StatusUpdate;
+import jccom.example.appbantra.Model.TotalRevenueResponse;
 import jccom.example.appbantra.Model.User;
 import jccom.example.appbantra.Model.LoginRequest;
 import jccom.example.appbantra.Model.AuthResponse;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PUT;
 import retrofit2.http.POST;
@@ -112,23 +118,13 @@ public interface ApiService {
     @GET("orders/all")
     Call<OrderResponse> getAllUsersOrders();
 
-
-
-
     @PUT("orders/updateStatus/{id}")
     Call<Order> updateOrderStatus(@Path("id") String orderId, @Body StatusUpdate statusUpdate);
 
+    @GET("order")
+    Call<OrderResponse> getOriginalOrders(@Header("Authorization") String authToken);
 
-    // View Cart
 
-    // View Cart
-//    @GET("cart")
-//    Call<CartResponse> viewCart();
-//
-//    // Add to Cart
-//    // Endpoint thêm sản phẩm vào giỏ hàng
-//    @POST("cart")
-//    Call<CartResponse> addToCart(@Header("Authorization") String token, @Body int cartRequest);
 
     @GET("cart")
     Call<CartResponse> viewCart(@Header("Authorization") String token);
@@ -141,10 +137,4 @@ public interface ApiService {
 
     @POST("cart/calculate-selected-total")
     Call<CartResponse> calculateSelectedTotal(@Header("Authorization") String token, @Body List<String> selectedProductIds);
-
-    @PUT("orders/updateStatus/{id}")
-    Call<Order> updateOrderStatus(@Path("id") String orderId, @Body StatusUpdate statusUpdate);
-
-    @GET("orders/all")
-    Call<OrderResponse> getAllUsersOrders();
 }
