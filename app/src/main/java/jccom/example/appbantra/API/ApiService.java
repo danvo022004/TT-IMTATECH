@@ -5,12 +5,17 @@ import java.util.List;
 import jccom.example.appbantra.Model.CartRequest;
 import jccom.example.appbantra.Model.CartResponse;
 import jccom.example.appbantra.Model.Category;
+import jccom.example.appbantra.Model.Order;
 import jccom.example.appbantra.Model.Product;
+import jccom.example.appbantra.Model.RevenueResponse;
+import jccom.example.appbantra.Model.StatusUpdate;
+import jccom.example.appbantra.Model.TotalRevenueResponse;
 import jccom.example.appbantra.Model.RevennueResponse;
 import jccom.example.appbantra.Model.User;
 import jccom.example.appbantra.Model.LoginRequest;
 import jccom.example.appbantra.Model.AuthResponse;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -24,39 +29,34 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    // Endpoint cho đăng ký người dùng
     @POST("register")
     Call<Void> register(@Body User user);
 
-    // Endpoint cho đăng nhập người dùng
     @POST("login")
     Call<AuthResponse> login(@Body LoginRequest loginRequest);
 
-    // Endpoint lấy thông tin người dùng
     @GET("user/{id}")
     Call<User> getUser(@Path("id") String userId);
 
-    // Endpoint cập nhật thông tin người dùng
     @PUT("user/{id}")
     Call<User> updateUser(@Path("id") String userId, @Body User user);
 
-    @GET("revenue/by-product") // Adjust endpoint accordingly
-    Call<RevennueResponse> getRevenueByProduct();
+    @GET("revenue/total")
+    Call<TotalRevenueResponse> getTotalRevenue();
+    @GET("revenue/products")
+    Call<RevenueResponse> getRevenueByProduct();
 
-    // **Danh mục sản phẩm**
 
-    // Lấy danh sách danh mục
+
     @GET("categories")
     Call<List<Category>> getListCategory();
 
-    // Thêm danh mục mới
     @POST("categories")
     @Multipart
     Call<Category> addCategory(@Part("name") String name,
                                @Part("description") String description,
                                @Part("imageUrl") String imageUrl);
 
-    // Cập nhật danh mục
     @PUT("categories/{id}")
     @Multipart
     Call<Category> updateCategory(@Path("id") String id,
@@ -84,24 +84,27 @@ public interface ApiService {
     // Thêm sản phẩm mới
     @POST("products")
     @Multipart
-    Call<Product> addProduct(@Part("categoryId") String categoryId,
-                             @Part("name") String name,
-                             @Part("price") double price,
-                             @Part("description") String description,
-                             @Part MultipartBody.Part image);
+    Call<Product> addProduct(
+            @Part("categoryId") RequestBody categoryId,
+            @Part("name") RequestBody name,
+            @Part("price") RequestBody price,
+            @Part("description") RequestBody description,
+            @Part MultipartBody.Part imageUrl
+    );
 
     // Cập nhật sản phẩm
     @PUT("products/{id}")
     @Multipart
-    Call<Product> updateProduct(@Path("id") String productId,
-                                @Part("categoryId") String categoryId,
-                                @Part("name") String name,
-                                @Part("price") double price,
-                                @Part("description") String description,
-                                @Part("status") boolean status,
-                                @Part MultipartBody.Part image);
+    Call<Product> updateProduct(
+            @Path("id") String productId,
+            @Part("categoryId") RequestBody categoryId,
+            @Part("name") RequestBody name,
+            @Part("price") RequestBody price,
+            @Part("description") RequestBody description,
+            @Part("status") RequestBody status,
+            @Part MultipartBody.Part image
+    );
 
-    // Xóa sản phẩm
     @DELETE("products/{id}")
     Call<Void> deleteProduct(@Path("id") String productId);
 

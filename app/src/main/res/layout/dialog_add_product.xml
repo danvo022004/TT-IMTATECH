@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/editCategoryId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Danh mục" />
+
+    <EditText
+        android:id="@+id/editProductName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tên sản phẩm" />
+
+    <EditText
+        android:id="@+id/editProductPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Giá sản phẩm"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editProductDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mô tả sản phẩm" />
+
+    <!-- ImageView để hiển thị ảnh đã chọn -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="Ảnh sản phẩm"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_image_placeholder" />
+
+    <!-- Button để chọn ảnh từ thư viện -->
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn ảnh từ thư viện"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>
