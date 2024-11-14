@@ -40,8 +40,10 @@ public interface ApiService {
     @PUT("user/{id}")
     Call<User> updateUser(@Path("id") String userId, @Body User user);
 
-    @GET("revenue/by-product") // Adjust endpoint accordingly
-    Call<RevennueResponse> getRevenueByProduct();
+    @GET("revenue/total")
+    Call<TotalRevenueResponse> getTotalRevenue();
+    @GET("revenue/products")
+    Call<RevenueResponse> getRevenueByProduct();
 
     // **Danh mục sản phẩm**
 
