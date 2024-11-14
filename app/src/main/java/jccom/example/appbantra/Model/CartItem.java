@@ -1,16 +1,16 @@
 package jccom.example.appbantra.Model;
 
 public class CartItem {
-    private Product product;
+    private Product productId;  // Đổi tên thành productId thay vì product để đồng nhất với API
     private int quantity;
 
     // Getter và Setter
-    public Product getProduct() {
-        return product;
+    public Product getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Product productId) {
+        this.productId = productId;
     }
 
     public int getQuantity() {

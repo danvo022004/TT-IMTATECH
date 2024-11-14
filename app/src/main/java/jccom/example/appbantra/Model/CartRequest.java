@@ -1,7 +1,7 @@
 package jccom.example.appbantra.Model;
 
 public class CartRequest {
-    private String productId;
+    private String productId;  // Kiểu String là hợp lý cho _id của sản phẩm
     private int quantity;
 
     public CartRequest(String productId, int quantity) {
