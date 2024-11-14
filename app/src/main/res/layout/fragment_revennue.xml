@@ -5,44 +5,41 @@
     android:layout_height="match_parent"
     tools:context=".FragmentAd.RevennueFragment"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    android:background="#FAFAFA">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="15dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/green"
-                android:text="Thống Kê"
-                android:textSize="20sp"
-                android:layout_marginLeft="100dp"
-                />
-        </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Daily report"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chart"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
-            android:layout_gravity="center"/>
+    <!-- Title Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thống Kê"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:paddingBottom="8dp"/>
+
+    <!-- Total Revenue Display -->
+    <TextView
+        android:id="@+id/textTotalRevenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tổng Doanh Thu: 0 VNĐ"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/purple_200"
+        android:paddingBottom="16dp"
+        android:layout_marginTop="50dp"/>
+
+    <!-- PieChart for Product Revenue -->
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chartProductRevenue"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
-
-
-
-
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:padding="8dp"/>
 
 </LinearLayout>

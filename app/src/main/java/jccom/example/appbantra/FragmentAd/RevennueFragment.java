@@ -1,11 +1,13 @@
 package jccom.example.appbantra.FragmentAd;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -24,13 +26,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RevennueFragment extends Fragment {
-    private PieChart pieChartTotalRevenue;
+    private TextView textTotalRevenue;
     private PieChart pieChartProductRevenue;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_revennue, container, false);
-        pieChartTotalRevenue = view.findViewById(R.id.chart);
+        textTotalRevenue = view.findViewById(R.id.textTotalRevenue);
         pieChartProductRevenue = view.findViewById(R.id.chartProductRevenue);
 
         fetchTotalRevenue();
@@ -47,7 +50,7 @@ public class RevennueFragment extends Fragment {
             @Override
             public void onResponse(Call<TotalRevenueResponse> call, Response<TotalRevenueResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    setupTotalRevenueChart(response.body().getTotalRevenue());
+                    displayTotalRevenue(response.body().getTotalRevenue());
                 }
             }
 
@@ -58,20 +61,9 @@ public class RevennueFragment extends Fragment {
         });
     }
 
-    private void setupTotalRevenueChart(int totalRevenue) {
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(totalRevenue, "Tổng Doanh Thu"));
-
-        PieDataSet dataSet = new PieDataSet(entries, "Biểu đồ Tổng Doanh Thu");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
-        PieData data = new PieData(dataSet);
-        pieChartTotalRevenue.setData(data);
-        pieChartTotalRevenue.getDescription().setEnabled(false);
-        pieChartTotalRevenue.setCenterText("Tổng: " + totalRevenue + " VNĐ");
-        pieChartTotalRevenue.setCenterTextSize(18f);
-        pieChartTotalRevenue.animateY(1000);
-        pieChartTotalRevenue.invalidate();
+    private void displayTotalRevenue(int totalRevenue) {
+        String totalRevenueText = "Tổng Doanh Thu: " + totalRevenue + " VNĐ";
+        textTotalRevenue.setText(totalRevenueText);
     }
 
     private void fetchProductRevenue() {
